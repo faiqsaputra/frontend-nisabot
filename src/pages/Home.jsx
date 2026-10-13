@@ -68,7 +68,7 @@ export default function Home() {
               </motion.p>
 
               <motion.div variants={reveal} className="mt-6 flex flex-wrap gap-2.5">
-                <a href="/https://muslimah-consultan.streamlit.app/" className="group flex items-center gap-2 rounded-2xl bg-[#7A1025] px-4 py-2.5 text-xs font-semibold text-white shadow-lg shadow-[#7A1025]/15 transition duration-300 hover:-translate-y-1 hover:bg-[#650D1F] hover:shadow-xl sm:text-sm">
+                <a href="https://muslimah-consultan.streamlit.app/" className="group flex items-center gap-2 rounded-2xl bg-[#7A1025] px-4 py-2.5 text-xs font-semibold text-white shadow-lg shadow-[#7A1025]/15 transition duration-300 hover:-translate-y-1 hover:bg-[#650D1F] hover:shadow-xl sm:text-sm">
                   <MessageCircle size={16} />
                   Tanya Nusa Bot
                   <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
