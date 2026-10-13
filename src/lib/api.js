@@ -1,7 +1,8 @@
 import { supabase } from './supabase';
 
 const API_URL = (
-  import.meta.env.VITE_API_URL || 'https://nusa-bot-backend.vercel.app/api'
+  import.meta.env.VITE_API_URL ||
+  'https://nusa-bot-backend.vercel.app/api'
 ).replace(/\/+$/, '');
 
 function normalizePath(path) {
@@ -18,6 +19,10 @@ function normalizePath(path) {
 
 function clampLimit(path) {
   const normalizedPath = normalizePath(path);
+
+  if (/^https?:\/\//i.test(normalizedPath)) {
+    return normalizedPath;
+  }
 
   try {
     const url = new URL(normalizedPath, `${API_URL}/`);
@@ -42,7 +47,7 @@ function clampLimit(path) {
 async function parseResponse(response) {
   const result = await response.json().catch(() => null);
 
-  if (!response.ok) {
+  if (!response.ok || result?.success === false) {
     const message =
       result?.message ||
       result?.error ||
@@ -57,27 +62,14 @@ async function parseResponse(response) {
     throw error;
   }
 
-  if (result?.success === false) {
-    const error = new Error(
-      result.message || result.error || 'Request gagal.'
-    );
-
-    error.status = response.status;
-    error.data = result;
-
-    throw error;
-  }
-
   return result;
 }
 
 function buildHeaders(options = {}, accessToken = null) {
   const headers = new Headers(options.headers || {});
+  const isFormData = options.body instanceof FormData;
 
-  if (
-    !(options.body instanceof FormData) &&
-    !headers.has('Content-Type')
-  ) {
+  if (options.body != null && !isFormData && !headers.has('Content-Type')) {
     headers.set('Content-Type', 'application/json');
   }
 
@@ -85,14 +77,19 @@ function buildHeaders(options = {}, accessToken = null) {
     headers.set('Authorization', `Bearer ${accessToken}`);
   }
 
+  if (!headers.has('Accept')) {
+    headers.set('Accept', 'application/json');
+  }
+
   return headers;
 }
 
 async function request(path, options = {}, accessToken = null) {
-  const normalizedPath = clampLimit(path);
+  const originalPath = normalizePath(path);
+  const normalizedPath = clampLimit(originalPath);
 
-  const url = /^https?:\/\//i.test(normalizePath(path))
-    ? normalizePath(path)
+  const url = /^https?:\/\//i.test(originalPath)
+    ? originalPath
     : `${API_URL}${normalizedPath}`;
 
   const response = await fetch(url, {
@@ -112,13 +109,13 @@ export async function apiFetch(path, options = {}) {
   const { data, error } = await supabase.auth.getSession();
 
   if (error) {
-    throw new Error('Gagal membaca session.');
+    throw new Error('Gagal membaca session Supabase.');
   }
 
   const accessToken = data.session?.access_token;
 
   if (!accessToken) {
-    throw new Error('Session tidak ditemukan.');
+    throw new Error('Session tidak ditemukan. Silakan login kembali.');
   }
 
   return request(path, options, accessToken);
@@ -137,11 +134,11 @@ export async function apiFetchWithFallback(paths, options = {}) {
     } catch (error) {
       lastError = error;
 
-      if (error?.status !== 404) {
+      if (error.status !== 404) {
         throw error;
       }
     }
   }
 
-  throw lastError || new Error('API endpoint not found.');
+  throw lastError || new Error('API endpoint tidak ditemukan.');
 }
