@@ -1,5 +1,11 @@
-import { useCallback, useEffect, useState } from 'react';
-import { Navigate, Outlet, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import {
+  Navigate,
+  Outlet,
+  Route,
+  Routes,
+  useLocation
+} from 'react-router-dom';
 
 import Home from './pages/Home';
 import Materi from './pages/Materi';
@@ -19,7 +25,10 @@ import AdminQuizHub from './pages/admin/AdminQuizHub';
 
 import { supabase } from './lib/supabase';
 
-const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:5000/api').replace(/\/+$/, '');
+const API_URL = (
+  import.meta.env.VITE_API_URL ||
+  'https://nusa-bot-backend.vercel.app/api'
+).replace(/\/+$/, '');
 
 function LoadingScreen() {
   return (
@@ -36,23 +45,30 @@ async function getCurrentUser() {
     return { session: null, user: null };
   }
 
+  const session = data.session;
+
   const response = await fetch(`${API_URL}/auth/me`, {
+    method: 'GET',
     headers: {
-      Authorization: `Bearer ${data.session.access_token}`,
+      Authorization: `Bearer ${session.access_token}`,
       Accept: 'application/json'
     }
   });
 
-  if (!response.ok) {
-    return { session: data.session, user: null };
-  }
-
   const result = await response.json().catch(() => null);
 
-  return {
-    session: data.session,
-    user: result?.user ?? null
-  };
+  if (!response.ok) {
+    return { session, user: null };
+  }
+
+  const user =
+    result?.user ??
+    result?.data?.user ??
+    result?.data?.profile ??
+    result?.data ??
+    null;
+
+  return { session, user };
 }
 
 function normalizeRole(role) {
@@ -61,13 +77,14 @@ function normalizeRole(role) {
 
 function ProtectedRoute() {
   const location = useLocation();
+
   const [loading, setLoading] = useState(true);
   const [session, setSession] = useState(null);
 
   useEffect(() => {
     let mounted = true;
 
-    const loadSession = async () => {
+    async function loadSession() {
       try {
         const { data, error } = await supabase.auth.getSession();
 
@@ -87,9 +104,9 @@ function ProtectedRoute() {
           setLoading(false);
         }
       }
-    };
+    }
 
-    loadSession();
+    void loadSession();
 
     const {
       data: { subscription }
@@ -106,14 +123,18 @@ function ProtectedRoute() {
     };
   }, []);
 
-  if (loading) return <LoadingScreen />;
+  if (loading) {
+    return <LoadingScreen />;
+  }
 
   if (!session) {
     return (
       <Navigate
         to="/login"
         replace
-        state={{ from: `${location.pathname}${location.search}` }}
+        state={{
+          from: `${location.pathname}${location.search}`
+        }}
       />
     );
   }
@@ -123,34 +144,23 @@ function ProtectedRoute() {
 
 function AdminRoute() {
   const location = useLocation();
+
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
 
-  const checkAdmin = useCallback(async () => {
-    setLoading(true);
-
-    try {
-      const { session, user } = await getCurrentUser();
-
-      setIsAdmin(Boolean(session && normalizeRole(user?.role) === 'ADMIN'));
-    } catch (error) {
-      console.error('Admin route check:', error);
-      setIsAdmin(false);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
   useEffect(() => {
     let mounted = true;
+    let refreshTimer;
 
-    const runCheck = async () => {
+    async function checkAdmin() {
       try {
         const { session, user } = await getCurrentUser();
 
         if (!mounted) return;
 
-        setIsAdmin(Boolean(session && normalizeRole(user?.role) === 'ADMIN'));
+        setIsAdmin(
+          Boolean(session && normalizeRole(user?.role) === 'ADMIN')
+        );
       } catch (error) {
         console.error('Admin route check:', error);
 
@@ -162,31 +172,51 @@ function AdminRoute() {
           setLoading(false);
         }
       }
-    };
+    }
 
-    runCheck();
+    void checkAdmin();
 
     const {
       data: { subscription }
-    } = supabase.auth.onAuthStateChange(() => {
-      if (!mounted) return;
-      checkAdmin();
+    } = supabase.auth.onAuthStateChange((event, nextSession) => {
+      if (!mounted || event === 'INITIAL_SESSION') return;
+
+      if (!nextSession) {
+        setIsAdmin(false);
+        setLoading(false);
+        return;
+      }
+
+      // Jalankan pemeriksaan setelah callback perubahan auth selesai.
+      clearTimeout(refreshTimer);
+
+      refreshTimer = setTimeout(() => {
+        if (mounted) {
+          setLoading(true);
+          void checkAdmin();
+        }
+      }, 0);
     });
 
     return () => {
       mounted = false;
+      clearTimeout(refreshTimer);
       subscription.unsubscribe();
     };
-  }, [checkAdmin]);
+  }, []);
 
-  if (loading) return <LoadingScreen />;
+  if (loading) {
+    return <LoadingScreen />;
+  }
 
   if (!isAdmin) {
     return (
       <Navigate
         to="/login"
         replace
-        state={{ from: location.pathname }}
+        state={{
+          from: location.pathname
+        }}
       />
     );
   }
@@ -195,14 +225,13 @@ function AdminRoute() {
 }
 
 function UserHomeRoute() {
-  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [destination, setDestination] = useState('home');
 
   useEffect(() => {
     let mounted = true;
 
-    const resolveHome = async () => {
+    async function resolveHome() {
       try {
         const { session, user } = await getCurrentUser();
 
@@ -224,16 +253,18 @@ function UserHomeRoute() {
           setLoading(false);
         }
       }
-    };
+    }
 
-    resolveHome();
+    void resolveHome();
 
     return () => {
       mounted = false;
     };
   }, []);
 
-  if (loading) return <LoadingScreen />;
+  if (loading) {
+    return <LoadingScreen />;
+  }
 
   if (destination === 'admin') {
     return <Navigate to="/admin" replace />;
@@ -245,7 +276,9 @@ function UserHomeRoute() {
 function AdminPlaceholder({ title }) {
   return (
     <div className="rounded-3xl bg-white p-8 shadow-sm">
-      <h1 className="text-2xl font-semibold text-slate-900">{title}</h1>
+      <h1 className="text-2xl font-semibold text-slate-900">
+        {title}
+      </h1>
     </div>
   );
 }
@@ -276,7 +309,7 @@ function NotFound() {
   );
 }
 
-function App() {
+export default function App() {
   return (
     <Routes>
       {/* Halaman publik */}
@@ -293,7 +326,6 @@ function App() {
 
         <Route path="/kalender" element={<Kalender />} />
 
-        {/* Quiz Mission */}
         <Route path="/kuis" element={<Kuis />} />
         <Route path="/kuis/:quizId" element={<Kuis />} />
 
@@ -307,8 +339,6 @@ function App() {
 
           <Route path="materi" element={<AdminMateri />} />
           <Route path="video" element={<AdminVideo />} />
-
-          {/* Admin Quiz Hub */}
           <Route path="kuis" element={<AdminQuizHub />} />
 
           <Route
@@ -333,10 +363,8 @@ function App() {
         </Route>
       </Route>
 
-      {/* Fallback */}
+      {/* Halaman tidak ditemukan */}
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }
-
-export default App;
