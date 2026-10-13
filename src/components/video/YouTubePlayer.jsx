@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Loader2 } from 'lucide-react';
-import { loadYouTubeIframeApi } from '../../../../backend/src/lib/youtube';
+import { loadYouTubeIframeApi } from "../../lib/youtube.js";
 
 export default function YouTubePlayer({ video, onReady, onTimeUpdate, onStateChange }) {
   const containerRef = useRef(null);
