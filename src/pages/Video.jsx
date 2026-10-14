@@ -477,35 +477,35 @@ function FeaturedVideo({ video, onPlay }) {
         />
       )}
 
-      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-[#281018] via-[#401522]/95 to-[#401522]/45" />
+      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-[#3D1D2B] via-[#754356]/95 to-[#C98DA5]/65" />
 
-      <div className="absolute -right-24 -top-32 -z-10 h-80 w-80 rounded-full bg-[#9B5265]/30 blur-3xl" />
+      <div className="absolute -right-24 -top-32 -z-10 h-80 w-80 rounded-full bg-[#F0B9CB]/30 blur-3xl" />
 
       <div className="grid items-center gap-7 p-5 sm:p-8 md:grid-cols-[1fr_0.85fr] md:gap-10 md:p-10">
         <div className="max-w-xl">
-          <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-[9px] font-bold uppercase tracking-[0.16em] text-white/90 backdrop-blur-md">
-            <Sparkles size={12} />
+          <span className="inline-flex items-center gap-2 rounded-full border border-[#F9DCE5]/25 bg-[#F9DCE5]/10 px-3 py-1.5 text-[9px] font-bold uppercase tracking-[0.16em] text-[#FFEAF0] backdrop-blur-md">
+            <Sparkles size={12} className="text-[#F4C1D1]" />
             Video pilihan
           </span>
 
-          <h2 className="mt-5 font-display text-2xl font-bold leading-tight tracking-tight sm:text-3xl lg:text-4xl">
+          <h2 className="mt-5 font-display text-2xl font-bold leading-tight tracking-tight text-[#FFF7F8] sm:text-3xl lg:text-4xl">
             {video?.title || 'Belajar fikih dengan lebih mudah'}
           </h2>
 
-          <p className="mt-3 line-clamp-3 max-w-lg text-xs leading-6 text-white/70 sm:text-sm">
-            {video?.description || 'Jelajahi koleksi video pembelajaran Nusa Bot untuk memahami fikih haid, nifas, istihadhah, dan ketentuan ibadah.'}
+          <p className="mt-3 line-clamp-3 max-w-lg text-xs leading-6 text-[#FBEAF0]/80 sm:text-sm">
+            {video?.description || 'Jelajahi video pembelajaran Nusa Bot untuk memahami fikih haid, nifas, istihadhah, dan ketentuan ibadah dengan lebih mudah.'}
           </p>
 
           {video && (
-            <div className="mt-5 flex flex-wrap items-center gap-3 text-[10px] text-white/60">
+            <div className="mt-5 flex flex-wrap items-center gap-3 text-[10px] text-[#F6DCE5]/75">
               <span className="inline-flex items-center gap-1.5">
-                <BookOpen size={13} />
+                <BookOpen size={13} className="text-[#F3B8CC]" />
                 {getPrimaryLabel(video)}
               </span>
 
               {getDuration(video.durationSeconds) && (
                 <span className="inline-flex items-center gap-1.5">
-                  <Clock3 size={13} />
+                  <Clock3 size={13} className="text-[#F3B8CC]" />
                   {getDuration(video.durationSeconds)}
                 </span>
               )}
@@ -517,7 +517,7 @@ function FeaturedVideo({ video, onPlay }) {
               type="button"
               onClick={() => video && onPlay(video)}
               disabled={!video}
-              className="inline-flex items-center gap-2.5 rounded-xl bg-white px-5 py-3 text-xs font-bold text-[#7A1025] transition hover:-translate-y-0.5 hover:bg-[#F6E5E8] disabled:cursor-not-allowed disabled:opacity-50"
+              className="inline-flex items-center gap-2.5 rounded-xl bg-[#FFF0F4] px-5 py-3 text-xs font-bold text-[#77364F] shadow-[0_6px_20px_rgba(30,10,20,0.12)] transition duration-300 hover:-translate-y-0.5 hover:bg-[#FADCE6] hover:shadow-[0_10px_28px_rgba(30,10,20,0.18)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#F4C1D1]/40 disabled:cursor-not-allowed disabled:opacity-50"
             >
               <Play size={15} fill="currentColor" />
               Putar video
@@ -528,9 +528,10 @@ function FeaturedVideo({ video, onPlay }) {
                 href={getWatchUrl(video)}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/5 px-4 py-3 text-xs font-semibold text-white transition hover:bg-white/10"
+                className="inline-flex items-center gap-2 rounded-xl border border-[#F9DCE5]/30 bg-white/[0.07] px-4 py-3 text-xs font-semibold text-[#FFF2F6] backdrop-blur-sm transition duration-300 hover:border-[#F9DCE5]/50 hover:bg-white/[0.14] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#F4C1D1]/30"
               >
-                Buka YouTube <ExternalLink size={13} />
+                Buka YouTube
+                <ExternalLink size={13} />
               </a>
             )}
           </div>
@@ -541,7 +542,7 @@ function FeaturedVideo({ video, onPlay }) {
           onClick={() => video && onPlay(video)}
           disabled={!video}
           aria-label={`Putar video ${video?.title || 'pilihan'}`}
-          className="group relative aspect-video w-full overflow-hidden rounded-2xl border border-white/10 bg-white/5 shadow-2xl disabled:cursor-default"
+          className="group relative aspect-video w-full overflow-hidden rounded-2xl border border-[#F9DCE5]/25 bg-[#F6DDE5]/10 shadow-[0_20px_55px_rgba(30,10,20,0.25)] transition duration-300 hover:border-[#F9DCE5]/50 hover:shadow-[0_24px_65px_rgba(30,10,20,0.35)] disabled:cursor-default"
         >
           {thumbnail && (
             <img
@@ -554,14 +555,14 @@ function FeaturedVideo({ video, onPlay }) {
             />
           )}
 
-          <div className="absolute inset-0 bg-black/15 transition group-hover:bg-black/5" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#321725]/35 via-transparent to-[#321725]/10 transition duration-300 group-hover:from-[#321725]/20" />
 
-          <span className="absolute left-1/2 top-1/2 flex h-14 w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white text-[#7A1025] shadow-xl transition duration-300 group-hover:scale-110">
+          <span className="absolute left-1/2 top-1/2 flex h-14 w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/70 bg-[#FFF3F6]/95 text-[#77364F] shadow-[0_8px_30px_rgba(30,10,20,0.22)] backdrop-blur-md transition duration-300 group-hover:scale-110 group-hover:bg-white">
             <Play size={20} fill="currentColor" />
           </span>
 
           {!thumbnail && (
-            <span className="absolute inset-0 flex items-center justify-center text-white/70">
+            <span className="absolute inset-0 flex items-center justify-center text-[#FFEAF0]/80">
               <VideoIcon size={35} />
             </span>
           )}
@@ -862,11 +863,10 @@ export default function Video() {
                   key={filter}
                   type="button"
                   onClick={() => setActiveFilter(filter)}
-                  className={`inline-flex shrink-0 items-center gap-2 rounded-xl border px-4 py-2.5 text-[11px] font-semibold transition ${
-                    isActive
+                  className={`inline-flex shrink-0 items-center gap-2 rounded-xl border px-4 py-2.5 text-[11px] font-semibold transition ${isActive
                       ? 'border-[#7A1025] bg-[#7A1025] text-white shadow-sm'
                       : 'border-[#E7D9D9] bg-white text-slate-600 hover:border-[#CBA9B0] hover:bg-[#FBF0F2] hover:text-[#7A1025]'
-                  }`}
+                    }`}
                 >
                   {isActive && <Check size={12} />}
                   {filter}
