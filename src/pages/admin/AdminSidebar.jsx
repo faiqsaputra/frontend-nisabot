@@ -79,7 +79,7 @@ export default function AdminSidebar({ mobileOpen, onClose }) {
             <div className="min-w-0">
               <div className="flex items-center gap-2">
                 <p className="truncate font-display text-[14px] font-semibold tracking-[-0.02em] text-white">
-                  Nusa Bot
+                  NISKA
                 </p>
 
                 <span className="rounded-full border border-[#F0C95A]/20 bg-[#F0C95A]/10 px-1.5 py-0.5 text-[7px] font-bold uppercase tracking-[0.14em] text-[#F0C95A]">

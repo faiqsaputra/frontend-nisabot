@@ -601,7 +601,7 @@ export default function AdminVideo() {
           </h1>
 
           <p className="mt-1 text-sm text-slate-500">
-            Kelola video YouTube yang ditampilkan di Nusa Bot.
+            Kelola video YouTube yang ditampilkan di NISQA.
           </p>
         </div>
 

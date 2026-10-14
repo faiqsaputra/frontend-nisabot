@@ -497,7 +497,7 @@ export default function Login() {
             <div className="mb-6 inline-flex items-center justify-center rounded-2xl bg-white/45 p-3 shadow-sm backdrop-blur-md">
               <img
                 src={logo}
-                alt="Nusa Bot Logo"
+                alt="NISQA Logo"
                 className="h-10 w-10 object-contain"
               />
             </div>
@@ -511,7 +511,7 @@ export default function Login() {
             </h1>
 
             <p className="mt-5 max-w-sm text-sm leading-6 text-[#7B4A54] sm:text-base">
-              Akses ruang belajar Nusa Bot untuk membaca materi,
+              Akses ruang belajar NISQA untuk membaca materi,
               mengikuti video pembelajaran, mencoba kuis, dan memahami
               siklus dengan pendekatan yang lebih interaktif.
             </p>
@@ -556,8 +556,8 @@ export default function Login() {
 
               <p className="mt-2 text-sm text-gray-500">
                 {isLogin
-                  ? 'Masuk untuk melanjutkan perjalanan belajar Nusa Bot.'
-                  : 'Buat akun dan mulai perjalanan belajar bersama Nusa Bot.'}
+                  ? 'Masuk untuk melanjutkan perjalanan belajar NISQA.'
+                  : 'Buat akun dan mulai perjalanan belajar bersama NISQA.'}
               </p>
             </motion.div>
 

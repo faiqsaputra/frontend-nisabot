@@ -14,7 +14,7 @@ const rightReveal = { hidden: { opacity: 0, x: 26, scale: 0.98 }, visible: { opa
 const stagger = { hidden: {}, visible: { transition: { staggerChildren: 0.08, delayChildren: 0.04 } } };
 
 const features = [
-  { id: 'materi', title: 'Nusa Bot', desc: 'Tanya jawab seputar ibadah dengan AI', icon: <MessageCircle size={20} />, link: '#chat' },
+  { id: 'materi', title: 'NISQA', desc: 'Tanya jawab seputar ibadah dengan AI', icon: <MessageCircle size={20} />, link: '#chat' },
   { id: 'video', title: 'Video Pembelajaran', desc: 'Belajar dengan video interaktif', icon: <Play size={20} />, link: '#video' },
   { id: 'kuis', title: 'Materi dan Kuis', desc: 'Materi lengkap dan kuis untuk menguji pemahaman', icon: <Gamepad2 size={20} />, link: '#kuis' },
   { id: 'kalender', title: 'Kalender Siklus', desc: 'Catat dan pantau siklus ibadah khusus haid', icon: <CalendarDays size={20} />, link: '#kalender' },
@@ -60,17 +60,17 @@ export default function Home() {
               <motion.h1 variants={reveal} className="font-display text-4xl font-bold leading-[0.98] tracking-tight text-[#131012] sm:text-5xl lg:text-[56px]">
                 Good Morning
                 <br />
-                <span className="text-[#7A1025]">Sahabat Nusa!</span>
+                <span className="text-[#7A1025]">Sahabat NISQA!</span>
               </motion.h1>
 
               <motion.p variants={reveal} className="mt-4 max-w-[480px] text-sm leading-6 text-gray-600 sm:text-[15px]">
-                Ayo mulai belajar dan berdiskusi tentang fiqih ibadah dengan Nusa Bot. Temukan jawaban, pelajari materi, dan tingkatkan pemahaman ibadahmu bersama kami!
+                Ayo mulai belajar dan berdiskusi tentang fiqih ibadah dengan NISQA. Temukan jawaban, pelajari materi, dan tingkatkan pemahaman ibadahmu bersama kami!
               </motion.p>
 
               <motion.div variants={reveal} className="mt-6 flex flex-wrap gap-2.5">
                 <a href="https://muslimah-consultan.streamlit.app/" className="group flex items-center gap-2 rounded-2xl bg-[#7A1025] px-4 py-2.5 text-xs font-semibold text-white shadow-lg shadow-[#7A1025]/15 transition duration-300 hover:-translate-y-1 hover:bg-[#650D1F] hover:shadow-xl sm:text-sm">
                   <MessageCircle size={16} />
-                  Tanya Nusa Bot
+                  Tanya NISQA
                   <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
                 </a>
 
@@ -90,7 +90,7 @@ export default function Home() {
 
             <motion.div initial="hidden" animate="visible" variants={rightReveal} className="relative z-20 hidden h-[480px] items-center justify-center md:flex lg:h-[540px]">
               <div className="absolute inset-0 z-0 bg-gradient-to-r from-[#FDF8F5]/40 via-transparent to-transparent" />
-              <motion.img src={maskotImage} alt="Nusa Bot" className="relative z-10 h-full w-full object-contain object-center drop-shadow-2xl" animate={{ y: [0, -14, 0, 10, 0], rotate: [0, 1.2, 0, -1.2, 0], scale: [1, 1.015, 1, 1.01, 1] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }} onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+              <motion.img src={maskotImage} alt="NISQA" className="relative z-10 h-full w-full object-contain object-center drop-shadow-2xl" animate={{ y: [0, -14, 0, 10, 0], rotate: [0, 1.2, 0, -1.2, 0], scale: [1, 1.015, 1, 1.01, 1] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }} onError={(e) => { e.currentTarget.style.display = 'none'; }} />
             </motion.div>
           </div>
         </section>
@@ -127,9 +127,9 @@ export default function Home() {
 
               <div className="relative z-30 flex min-h-[260px] items-center px-6 py-7 sm:px-8 md:px-8 lg:px-10">
                 <div className="max-w-lg text-white">
-                  <span className="text-[9px] font-bold uppercase tracking-[0.22em] text-red-200 sm:text-[10px]">NUSA BOT</span>
+                  <span className="text-[9px] font-bold uppercase tracking-[0.22em] text-red-200 sm:text-[10px]">NISQA</span>
                   <h2 className="mt-2 font-display text-2xl font-bold leading-[1.02] sm:text-3xl">Teman Belajar Ibadah<br />Setiap Hari</h2>
-                  <p className="mt-3 max-w-md text-xs leading-5 text-red-100 sm:text-sm">Dapatkan pemahaman fiqih ibadah yang benar, akurat, dan mudah dipahami bersama Nusa Bot.</p>
+                  <p className="mt-3 max-w-md text-xs leading-5 text-red-100 sm:text-sm">Dapatkan pemahaman fiqih ibadah yang benar, akurat, dan mudah dipahami bersama NISQA.</p>
                   <a href="#chat" className="group mt-5 inline-flex items-center gap-2 rounded-2xl bg-white px-4 py-2.5 text-xs font-semibold text-[#7A1025] shadow-md transition duration-300 hover:-translate-y-1 hover:bg-[#FFF9FA] sm:text-sm"><MessageCircle size={15} /> Tanya Sekarang <ArrowRight size={15} className="transition-transform duration-300 group-hover:translate-x-1" /></a>
                 </div>
               </div>
@@ -144,7 +144,7 @@ export default function Home() {
         </section>
       </main>
 
-      <footer className="border-t border-gray-200 bg-white/70"><div className="mx-auto flex max-w-7xl flex-col gap-1.5 px-4 py-4 text-[10px] text-gray-500 sm:px-6 md:flex-row md:items-center md:justify-between md:px-8 sm:text-xs"><span>© 2026 Nusa Bot. Sahabat Belajar Ibadah.</span><span>Belajar dengan lebih mudah, kapan saja.</span></div></footer>
+      <footer className="border-t border-gray-200 bg-white/70"><div className="mx-auto flex max-w-7xl flex-col gap-1.5 px-4 py-4 text-[10px] text-gray-500 sm:px-6 md:flex-row md:items-center md:justify-between md:px-8 sm:text-xs"><span>© 2026 NISQA. Sahabat Belajar Ibadah.</span><span>Belajar dengan lebih mudah, kapan saja.</span></div></footer>
     </div>
   );
 }

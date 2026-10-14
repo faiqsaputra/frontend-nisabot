@@ -170,7 +170,7 @@ const getSourceLabel = video => {
   if (video?.author?.name) return video.author.name;
   if (video?.author?.email) return video.author.email;
 
-  return 'Nusa Bot';
+  return 'NISQA';
 };
 
 const sortVideos = videos =>
@@ -566,7 +566,7 @@ function SelectedVideo({ video, reduceMotion, onOpenPlayer }) {
               </h2>
 
               <p className="mt-2.5 text-xs leading-5 text-gray-500 sm:text-sm sm:leading-6">
-                {video.description || 'Video pembelajaran pilihan Nusa Bot.'}
+                {video.description || 'Video pembelajaran pilihan NISQA.'}
               </p>
 
               <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-[10px] text-gray-400">
@@ -814,7 +814,7 @@ function VideoSearchPalette({
 
                           <p className="mt-1 line-clamp-1 text-[10px] text-gray-500">
                             {video.description ||
-                              'Video pembelajaran Nusa Bot'}
+                              'Video pembelajaran NISQA'}
                           </p>
 
                           <div className="mt-1.5 flex flex-wrap gap-1.5">
@@ -879,7 +879,7 @@ function VideoSearchPalette({
               </div>
 
               <span className="hidden text-[9px] font-medium text-gray-400 sm:block">
-                Nusa Bot Search
+                NISQA Search
               </span>
             </div>
           </motion.div>
@@ -1249,7 +1249,7 @@ export default function Video() {
                 Pembelajaran
                 <br />
                 <span className="text-[#7A1025]">
-                  Nusa Bot.
+                  NISQA.
                 </span>
               </motion.h1>
 
@@ -1537,7 +1537,7 @@ export default function Video() {
 
       <footer className="border-t border-gray-200 bg-white">
         <div className="mx-auto flex max-w-7xl flex-col gap-1 px-4 py-4 text-[10px] text-gray-500 sm:px-6 sm:text-xs md:flex-row md:items-center md:justify-between md:px-8">
-          <span>© 2026 Nusa Bot. Sahabat Belajar Ibadah.</span>
+          <span>© 2026 NISQA. Sahabat Belajar Ibadah.</span>
           <span>Literasi Fiqih • Video Pembelajaran</span>
         </div>
       </footer>

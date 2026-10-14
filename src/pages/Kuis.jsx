@@ -302,7 +302,7 @@ function LoadingPanel({ label = 'Memuat data tantangan...' }) {
       <div>
         <p className="font-semibold text-slate-800">{label}</p>
         <p className="mt-1 text-sm text-slate-400">
-          Menghubungkan dengan server Nusa Bot.
+          Menghubungkan dengan server NISQA.
         </p>
       </div>
     </div>
@@ -1147,7 +1147,7 @@ export default function Kuis() {
           <div className="relative">
             <div className="inline-flex items-center gap-2 rounded-full bg-[#F6E5E8] px-3 py-1.5 text-xs font-semibold text-[#7A1025]">
               <Sparkles size={14} />
-              Nusa Bot Learning
+              NISQA Learning
             </div>
 
             <div className="mt-5 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">

@@ -113,7 +113,7 @@ export default function AdminDashboard() {
         <div>
           <div className="mb-2 flex items-center gap-2">
             <span className="h-1.5 w-1.5 rounded-full bg-[#D4A017]" />
-            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#9B5265]">Nusa Bot CMS</span>
+            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#9B5265]">NISQA CMS</span>
           </div>
 
           <h2 className="text-2xl font-bold tracking-[-0.03em] text-[#0F172A] sm:text-3xl">Selamat datang, Admin.</h2>

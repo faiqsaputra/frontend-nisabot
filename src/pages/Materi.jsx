@@ -559,7 +559,7 @@ export default function Materi() {
           <div className="relative mx-auto flex max-w-7xl flex-col gap-5 px-4 py-9 sm:px-6 md:flex-row md:items-center md:justify-between md:px-8 md:py-11">
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }} variants={leftReveal} className="max-w-xl">
               <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#7A1025] sm:text-[10px]">
-                NUSA BOT
+                NISQA
               </span>
 
               <h2 className="mt-2 font-display text-2xl font-bold leading-[1.05] text-[#171115] sm:text-3xl">
@@ -581,7 +581,7 @@ export default function Materi() {
 
       <footer className="border-t border-gray-200 bg-white">
         <div className="mx-auto flex max-w-7xl flex-col gap-1 px-4 py-4 text-[10px] text-gray-500 sm:px-6 sm:text-xs md:flex-row md:items-center md:justify-between md:px-8">
-          <span>© 2026 Nusa Bot. Sahabat Belajar Ibadah.</span>
+          <span>© 2026 NISQA. Sahabat Belajar Ibadah.</span>
           <span>Literasi Fiqih • Belajar dengan teknologi</span>
         </div>
       </footer>

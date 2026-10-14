@@ -163,11 +163,11 @@ export default function Navbar() {
   return (
     <motion.header initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.5, ease: 'easeOut' }} className={`fixed inset-x-0 top-0 z-[100] w-full border-b transition-all duration-300 ${scrolled ? 'border-gray-200/80 bg-white/95 shadow-[0_4px_24px_rgba(80,20,30,0.06)] backdrop-blur-xl' : 'border-gray-100/90 bg-white'}`}>
       <div className={`mx-auto flex w-full max-w-[1440px] items-center justify-between px-5 transition-all duration-300 sm:px-7 lg:px-10 ${scrolled ? 'h-[58px]' : 'h-[68px]'}`}>
-        <button onClick={handleHomeClick} className="flex shrink-0 items-center gap-2.5 text-left" aria-label="Nusa Bot Home">
-          <img src="/assets/logo/logo.png" alt="Nusa Bot" className="h-9 w-9 object-contain" />
+        <button onClick={handleHomeClick} className="flex shrink-0 items-center gap-2.5 text-left" aria-label="NISKA Home">
+          <img src="/assets/logo/logo.png" alt="NISKA" className="h-9 w-9 object-contain" />
 
           <div className="leading-none">
-            <p className="font-display text-[18px] font-bold tracking-[-0.03em] text-[#7A1025]">NUSA BOT</p>
+            <p className="font-display text-[18px] font-bold tracking-[-0.03em] text-[#7A1025]">NISKA</p>
             <p className="mt-1 text-[9px] font-medium text-gray-500">Sahabat Belajar Ibadah</p>
           </div>
         </button>
