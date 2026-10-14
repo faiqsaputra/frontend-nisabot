@@ -483,8 +483,9 @@ function FeaturedVideo({ video, onPlay }) {
 
       <div className="grid items-center gap-7 p-5 sm:p-8 md:grid-cols-[1fr_0.85fr] md:gap-10 md:p-10">
         <div className="max-w-xl">
-          <span className="inline-flex items-center gap-2 rounded-full border border-[#F9DCE5]/25 bg-[#F9DCE5]/10 px-3 py-1.5 text-[9px] font-bold uppercase tracking-[0.16em] text-[#FFEAF0] backdrop-blur-md">
-            <Sparkles size={12} className="text-[#F4C1D1]" />
+          <span className="inline-flex items-center gap-2.5 rounded-xl border border-white/[0.16] bg-white/[0.07] px-3.5 py-2 text-[11px] font-semibold tracking-[0.02em] text-[#FFF4F6] shadow-[inset_0_1px_0_rgba(255,255,255,0.14),0_6px_20px_rgba(30,10,18,0.12)] backdrop-blur-xl">
+            <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#E8A9BD] shadow-[0_0_0_3px_rgba(232,169,189,0.12)]" />
+            <span className="h-4 w-px bg-white/20" />
             Video pilihan
           </span>
 
@@ -864,8 +865,8 @@ export default function Video() {
                   type="button"
                   onClick={() => setActiveFilter(filter)}
                   className={`inline-flex shrink-0 items-center gap-2 rounded-xl border px-4 py-2.5 text-[11px] font-semibold transition ${isActive
-                      ? 'border-[#7A1025] bg-[#7A1025] text-white shadow-sm'
-                      : 'border-[#E7D9D9] bg-white text-slate-600 hover:border-[#CBA9B0] hover:bg-[#FBF0F2] hover:text-[#7A1025]'
+                    ? 'border-[#7A1025] bg-[#7A1025] text-white shadow-sm'
+                    : 'border-[#E7D9D9] bg-white text-slate-600 hover:border-[#CBA9B0] hover:bg-[#FBF0F2] hover:text-[#7A1025]'
                     }`}
                 >
                   {isActive && <Check size={12} />}
