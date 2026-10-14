@@ -22,6 +22,7 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminMateri from './pages/admin/AdminMateri';
 import AdminVideo from './pages/admin/AdminVideo';
 import AdminQuizHub from './pages/admin/AdminQuizHub';
+import AdminQuizStudio from './pages/admin/AdminQuizStudio.jsx';
 
 import { supabase } from './lib/supabase';
 
@@ -340,6 +341,7 @@ export default function App() {
           <Route path="materi" element={<AdminMateri />} />
           <Route path="video" element={<AdminVideo />} />
           <Route path="kuis" element={<AdminQuizHub />} />
+          <Route path="/admin/quizzes/:quizId/studio" element={<AdminQuizStudio />}/>
 
           <Route
             path="pengguna"
