@@ -17,7 +17,7 @@ const logo = '/assets/logo/logo.png';
 
 const API_URL = (
   import.meta.env.VITE_API_URL ||
-  'https://nusa-bot-backend.vercel.app/api'
+  'https://nisqa-bot.vercel.app/api'
 ).replace(/\/+$/, '');
 
 function getAppUrl() {

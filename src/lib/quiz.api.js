@@ -1,7 +1,7 @@
 import { supabase } from './supabase.js';
 
 const API_URL = (
-  import.meta.env.VITE_API_URL || 'https://nusa-bot-backend.vercel.app/api'
+  import.meta.env.VITE_API_URL || 'https://nisqa-bot.vercel.app/api'
 ).replace(/\/+$/, '');
 
 function createApiError(message, status = 0, data = null) {
