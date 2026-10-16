@@ -252,12 +252,7 @@ function PrimaryButton({
   className = ''
 }) {
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      disabled={disabled || loading}
-      className={`inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-[#7A1025] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#64101f] disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
-    >
+    <button type="button" onClick={onClick} disabled={disabled || loading} className={`inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-[#7A1025] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#64101f] disabled:cursor-not-allowed disabled:opacity-50 ${className}`}>
       {loading ? (
         <LoaderCircle size={17} className="animate-spin" />
       ) : Icon ? (
@@ -272,18 +267,11 @@ function ErrorMessage({ children, onRetry }) {
   if (!children) return null;
 
   return (
-    <div
-      role="alert"
-      className="flex flex-col gap-3 rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm leading-6 text-rose-700 sm:flex-row sm:items-center sm:justify-between"
-    >
+    <div role="alert" className="flex flex-col gap-3 rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm leading-6 text-rose-700 sm:flex-row sm:items-center sm:justify-between">
       <p>{children}</p>
 
       {onRetry && (
-        <button
-          type="button"
-          onClick={onRetry}
-          className="inline-flex shrink-0 items-center justify-center gap-2 font-semibold text-rose-700 hover:text-rose-900"
-        >
+        <button type="button" onClick={onRetry} className="inline-flex shrink-0 items-center justify-center gap-2 font-semibold text-rose-700 hover:text-rose-900">
           <RefreshCw size={15} />
           Coba lagi
         </button>
@@ -629,20 +617,11 @@ export default function Kuis() {
         <Navbar />
 
         <main className="mx-auto flex min-h-[calc(100svh-68px)] w-full max-w-5xl items-center justify-center px-4 py-10 sm:px-6 lg:px-8">
-          <motion.div
-            initial={reduceMotion ? false : { opacity: 0, y: 24, scale: 0.97 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            className="w-full overflow-hidden rounded-[32px] border border-[#7A1025]/10 bg-white shadow-[0_24px_80px_rgba(122,16,37,0.10)]"
-          >
+          <motion.div initial={reduceMotion ? false : { opacity: 0, y: 24, scale: 0.97 }} animate={{ opacity: 1, y: 0, scale: 1 }} className="w-full overflow-hidden rounded-[32px] border border-[#7A1025]/10 bg-white shadow-[0_24px_80px_rgba(122,16,37,0.10)]">
             <div className="relative overflow-hidden px-6 py-12 text-center sm:px-10 sm:py-16">
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,#F6E5E8,transparent_48%)]" />
 
-              <motion.div
-                initial={reduceMotion ? false : { scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ type: 'spring', stiffness: 200, damping: 12 }}
-                className={`relative mx-auto flex h-20 w-20 items-center justify-center rounded-full text-white shadow-lg ${passed ? 'bg-[#7A1025]' : 'bg-slate-500'}`}
-              >
+              <motion.div initial={reduceMotion ? false : { scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 200, damping: 12 }} className={`relative mx-auto flex h-20 w-20 items-center justify-center rounded-full text-white shadow-lg ${passed ? 'bg-[#7A1025]' : 'bg-slate-500'}`}>
                 {passed ? <Trophy size={34} /> : <Sparkles size={34} />}
               </motion.div>
 
@@ -689,11 +668,7 @@ export default function Kuis() {
 
               <div className="relative mt-8 flex flex-col justify-center gap-3 sm:flex-row">
                 {passed ? (
-                  <PrimaryButton
-                    onClick={handleBackToMaterial}
-                    icon={ArrowLeft}
-                    className="[&>svg]:rotate-180"
-                  >
+                  <PrimaryButton onClick={handleBackToMaterial} icon={ArrowLeft} className="[&>svg]:rotate-180">
                     Lanjut ke Materi
                   </PrimaryButton>
                 ) : (
@@ -702,11 +677,7 @@ export default function Kuis() {
                   </PrimaryButton>
                 )}
 
-                <button
-                  type="button"
-                  onClick={handleBackToList}
-                  className="inline-flex min-h-12 items-center justify-center rounded-2xl border border-slate-200 px-6 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
-                >
+                <button type="button" onClick={handleBackToList} className="inline-flex min-h-12 items-center justify-center rounded-2xl border border-slate-200 px-6 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
                   Lihat Kuis Lain
                 </button>
               </div>
@@ -725,11 +696,7 @@ export default function Kuis() {
         <Navbar />
 
         <main className="mx-auto w-full max-w-7xl px-4 pb-10 pt-6 sm:px-6 lg:px-8 lg:pb-14 lg:pt-8">
-          <button
-            type="button"
-            onClick={handleBackToList}
-            className="mb-6 inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition hover:text-[#7A1025]"
-          >
+          <button type="button" onClick={handleBackToList} className="mb-6 inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition hover:text-[#7A1025]">
             <ArrowLeft size={17} />
             Keluar dari tantangan
           </button>
@@ -776,11 +743,7 @@ export default function Kuis() {
             </div>
 
             <div className="mt-6 h-2 overflow-hidden rounded-full bg-white shadow-inner">
-              <motion.div
-                animate={{ width: `${progressPercentage}%` }}
-                transition={{ duration: 0.3 }}
-                className="h-full rounded-full bg-[#7A1025]"
-              />
+              <motion.div animate={{ width: `${progressPercentage}%` }} transition={{ duration: 0.3 }} className="h-full rounded-full bg-[#7A1025]" />
             </div>
           </section>
 
@@ -789,14 +752,7 @@ export default function Kuis() {
           <div className="mt-5 grid gap-6 lg:grid-cols-[minmax(0,1fr)_280px]">
             <section className="min-w-0">
               <AnimatePresence mode="wait">
-                <motion.div
-                  key={currentQuestion.id}
-                  initial={reduceMotion ? false : { opacity: 0, x: 18 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={reduceMotion ? undefined : { opacity: 0, x: -18 }}
-                  transition={{ duration: 0.25 }}
-                  className="rounded-[30px] border border-[#7A1025]/10 bg-white p-5 shadow-[0_18px_60px_rgba(122,16,37,0.07)] sm:p-7 lg:p-8"
-                >
+                <motion.div key={currentQuestion.id} initial={reduceMotion ? false : { opacity: 0, x: 18 }} animate={{ opacity: 1, x: 0 }} exit={reduceMotion ? undefined : { opacity: 0, x: -18 }} transition={{ duration: 0.25 }} className="rounded-[30px] border border-[#7A1025]/10 bg-white p-5 shadow-[0_18px_60px_rgba(122,16,37,0.07)] sm:p-7 lg:p-8">
                   <div className="mb-7 flex items-start justify-between gap-5">
                     <div>
                       <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
@@ -813,44 +769,26 @@ export default function Kuis() {
                     </div>
                   </div>
 
-                  <QuizChallenge
-                    key={currentQuestion.id}
-                    question={currentQuestion}
-                    validateAnswer={validateQuestionAnswer}
-                    onAnswer={handleValidatedAnswer}
-                    answerResult={currentResult}
-                    showFeedback={Boolean(currentResult)}
-                    disabled={Boolean(currentResult) || finishing}
-                  />
+                  <QuizChallenge key={currentQuestion.id} question={currentQuestion} validateAnswer={validateQuestionAnswer} onAnswer={handleValidatedAnswer} answerResult={currentResult} showFeedback={Boolean(currentResult)} disabled={Boolean(currentResult) || finishing} />
 
                   {currentResult && (
-                    <motion.div
-                      initial={reduceMotion ? false : { opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="mt-6 space-y-4"
-                    >
-                      <div
-                        className={`rounded-2xl border p-4 ${
+                    <motion.div initial={reduceMotion ? false : { opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-6 space-y-4">
+                      <div className={`rounded-2xl border p-4 ${
                           currentResult.correct
                             ? 'border-emerald-200 bg-emerald-50'
                             : 'border-rose-200 bg-rose-50'
-                        }`}
-                      >
+                        }`}>
                         <div className="flex items-start gap-3">
-                          <div
-                            className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-white ${
+                          <div className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-white ${
                               currentResult.correct ? 'bg-emerald-500' : 'bg-rose-500'
-                            }`}
-                          >
+                            }`}>
                             {currentResult.correct ? <Check size={16} /> : <X size={16} />}
                           </div>
 
                           <div>
-                            <p
-                              className={`font-semibold ${
+                            <p className={`font-semibold ${
                                 currentResult.correct ? 'text-emerald-700' : 'text-rose-700'
-                              }`}
-                            >
+                              }`}>
                               {currentResult.correct ? 'Jawaban tepat!' : 'Belum tepat'}
                             </p>
 
@@ -873,12 +811,7 @@ export default function Kuis() {
                           Hasil penilaian diterima dari server.
                         </p>
 
-                        <PrimaryButton
-                          onClick={handleNext}
-                          loading={finishing}
-                          icon={finishing ? undefined : ArrowLeft}
-                          className={!finishing ? '[&>svg]:rotate-180' : ''}
-                        >
+                        <PrimaryButton onClick={handleNext} loading={finishing} icon={finishing ? undefined : ArrowLeft} className={!finishing ? '[&>svg]:rotate-180' : ''}>
                           {finishing
                             ? 'Menyelesaikan kuis...'
                             : currentIndex === totalQuestions - 1
@@ -921,12 +854,7 @@ export default function Kuis() {
                     const active = index === currentIndex;
 
                     return (
-                      <button
-                        key={question.id}
-                        type="button"
-                        disabled
-                        aria-label={`Tantangan ${index + 1}${answered ? ', selesai' : ''}`}
-                        className={`flex h-10 items-center justify-center rounded-xl text-sm font-semibold transition ${
+                      <button key={question.id} type="button" disabled aria-label={`Tantangan ${index + 1}${answered ? ', selesai' : ''}`} className={`flex h-10 items-center justify-center rounded-xl text-sm font-semibold transition ${
                           active
                             ? 'bg-[#7A1025] text-white shadow-md'
                             : answered
@@ -934,8 +862,7 @@ export default function Kuis() {
                                 ? 'bg-emerald-50 text-emerald-600'
                                 : 'bg-rose-50 text-rose-500'
                               : 'bg-slate-50 text-slate-400'
-                        }`}
-                      >
+                        }`}>
                         {answered ? (
                           result.correct ? <Check size={15} /> : <X size={15} />
                         ) : (
@@ -955,11 +882,7 @@ export default function Kuis() {
                   </div>
 
                   <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-slate-100">
-                    <motion.div
-                      animate={{ width: `${progressPercentage}%` }}
-                      transition={{ duration: 0.3 }}
-                      className="h-full rounded-full bg-[#7A1025]"
-                    />
+                    <motion.div animate={{ width: `${progressPercentage}%` }} transition={{ duration: 0.3 }} className="h-full rounded-full bg-[#7A1025]" />
                   </div>
                 </div>
               </div>
@@ -996,11 +919,7 @@ export default function Kuis() {
         <Navbar />
 
         <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
-          <button
-            type="button"
-            onClick={handleBackToList}
-            className="mb-6 inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition hover:text-[#7A1025]"
-          >
+          <button type="button" onClick={handleBackToList} className="mb-6 inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition hover:text-[#7A1025]">
             <ArrowLeft size={17} />
             Daftar Kuis
           </button>
@@ -1078,21 +997,11 @@ export default function Kuis() {
               <ErrorMessage>{actionError}</ErrorMessage>
 
               <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-                <PrimaryButton
-                  onClick={handleStartQuiz}
-                  loading={starting}
-                  disabled={!questionCount}
-                  icon={Play}
-                  className="sm:min-w-52"
-                >
+                <PrimaryButton onClick={handleStartQuiz} loading={starting} disabled={!questionCount} icon={Play} className="sm:min-w-52">
                   {starting ? 'Menyiapkan kuis...' : 'Mulai Challenge'}
                 </PrimaryButton>
 
-                <button
-                  type="button"
-                  onClick={handleBackToList}
-                  className="inline-flex min-h-12 items-center justify-center rounded-2xl border border-slate-200 px-5 text-sm font-semibold text-slate-600 transition hover:bg-slate-50"
-                >
+                <button type="button" onClick={handleBackToList} className="inline-flex min-h-12 items-center justify-center rounded-2xl border border-slate-200 px-5 text-sm font-semibold text-slate-600 transition hover:bg-slate-50">
                   Pilih Kuis Lain
                 </button>
               </div>
@@ -1189,11 +1098,7 @@ export default function Kuis() {
               Kuis yang telah dipublikasikan admin akan muncul di halaman ini.
             </p>
 
-            <button
-              type="button"
-              onClick={handleBackToMaterial}
-              className="mt-5 inline-flex min-h-11 items-center gap-2 rounded-xl border border-slate-200 px-4 text-sm font-semibold text-slate-700 hover:bg-slate-50"
-            >
+            <button type="button" onClick={handleBackToMaterial} className="mt-5 inline-flex min-h-11 items-center gap-2 rounded-xl border border-slate-200 px-4 text-sm font-semibold text-slate-700 hover:bg-slate-50">
               <ArrowLeft size={16} />
               Kembali ke Materi
             </button>
@@ -1206,13 +1111,7 @@ export default function Kuis() {
               const questionCount = getQuestionCount(item);
 
               return (
-                <motion.article
-                  key={item.id || index}
-                  initial={reduceMotion ? false : { opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: Math.min(index * 0.04, 0.2) }}
-                  className="group flex h-full flex-col overflow-hidden rounded-[28px] border border-[#7A1025]/10 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-[0_18px_50px_rgba(122,16,37,0.08)]"
-                >
+                <motion.article key={item.id || index} initial={reduceMotion ? false : { opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: Math.min(index * 0.04, 0.2) }} className="group flex h-full flex-col overflow-hidden rounded-[28px] border border-[#7A1025]/10 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-[0_18px_50px_rgba(122,16,37,0.08)]">
                   <div className="relative flex h-36 items-center justify-center overflow-hidden bg-[#F6E5E8]">
                     <div className="absolute -right-5 -top-7 h-32 w-32 rounded-full bg-white/70 blur-2xl" />
                     <div className="absolute -bottom-10 -left-5 h-32 w-32 rounded-full bg-[#7A1025]/10 blur-2xl" />
@@ -1247,12 +1146,7 @@ export default function Kuis() {
                       </span>
                     </div>
 
-                    <button
-                      type="button"
-                      onClick={() => handleChooseQuiz(item.id)}
-                      disabled={!item.id}
-                      className="mt-5 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl bg-[#7A1025] px-4 text-sm font-semibold text-white transition hover:bg-[#64101f] disabled:opacity-50"
-                    >
+                    <button type="button" onClick={() => handleChooseQuiz(item.id)} disabled={!item.id} className="mt-5 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl bg-[#7A1025] px-4 text-sm font-semibold text-white transition hover:bg-[#64101f] disabled:opacity-50">
                       Lihat Tantangan
                       <ArrowLeft size={16} className="rotate-180" />
                     </button>

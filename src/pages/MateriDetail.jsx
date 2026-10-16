@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { motion } from 'framer-motion';
 import {
   ArrowLeft,
   BookOpenCheck,
@@ -7,13 +8,15 @@ import {
   Clock3,
   ListTree,
   MessageCircle,
-  Send
+  Send,
+  Sparkles,
+  Trophy
 } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
-import { motion } from 'framer-motion';
 
 import Navbar from '../components/Navbar';
 import { publicFetch } from '../lib/api';
+import { quizApi } from '../lib/quiz.api.js';
 
 const COLORS = {
   primary: '#7A1025',
@@ -33,19 +36,13 @@ function getReadingTime(content, fallback) {
     return Math.ceil(savedTime);
   }
 
-  const words = String(content || '')
-    .trim()
-    .split(/\s+/)
-    .filter(Boolean).length;
+  const words = String(content || '').trim().split(/\s+/).filter(Boolean).length;
 
   return Math.max(1, Math.ceil(words / 200));
 }
 
 function parseContent(content) {
-  const lines = String(content || '')
-    .replace(/\r/g, '')
-    .split('\n');
-
+  const lines = String(content || '').replace(/\r/g, '').split('\n');
   const blocks = [];
   let paragraph = [];
   let list = [];
@@ -57,10 +54,7 @@ function parseContent(content) {
     const value = paragraph.join(' ').trim();
 
     if (value) {
-      blocks.push({
-        type: 'paragraph',
-        content: value
-      });
+      blocks.push({ type: 'paragraph', content: value });
     }
 
     paragraph = [];
@@ -69,10 +63,7 @@ function parseContent(content) {
   const pushList = () => {
     if (!list.length) return;
 
-    blocks.push({
-      type: listType || 'list',
-      items: [...list]
-    });
+    blocks.push({ type: listType || 'list', items: [...list] });
 
     list = [];
     listType = null;
@@ -98,13 +89,11 @@ function parseContent(content) {
     if (heading) {
       pushParagraph();
       pushList();
-
       blocks.push({
         type: 'heading',
         level: heading[1].length,
         content: heading[2].trim()
       });
-
       return;
     }
 
@@ -138,9 +127,7 @@ function parseContent(content) {
 }
 
 function renderInlineText(text) {
-  const parts = String(text || '').split(
-    /(\*\*.+?\*\*|__.+?__)/g
-  );
+  const parts = String(text || '').split(/(\*\*.+?\*\*|__. +?__)/g);
 
   return parts.map((part, index) => {
     const isBold =
@@ -149,10 +136,7 @@ function renderInlineText(text) {
 
     if (isBold) {
       return (
-        <strong
-          key={index}
-          className="font-semibold text-[#2B2025]"
-        >
+        <strong key={index} className="font-semibold text-[#2B2025]">
           {part.slice(2, -2)}
         </strong>
       );
@@ -167,19 +151,15 @@ function getQuestionStorageKey(slug) {
 }
 
 function getErrorMessage(error, fallback) {
-  return error instanceof Error && error.message
-    ? error.message
-    : fallback;
+  return error?.data?.message || error?.message || fallback;
 }
 
 function normalizeMaterial(response) {
-  return (
-    response?.data?.data ??
-    response?.data ??
-    response?.material ??
-    response ??
-    null
-  );
+  return response?.data?.data ?? response?.data ?? response?.material ?? response ?? null;
+}
+
+function normalizeQuiz(response) {
+  return response?.data?.quiz ?? response?.quiz ?? response?.data ?? response ?? null;
 }
 
 function formatDate(value) {
@@ -194,16 +174,6 @@ function formatDate(value) {
     month: 'long',
     year: 'numeric'
   });
-}
-
-function createQuestionId() {
-  if (
-    typeof globalThis.crypto?.randomUUID === 'function'
-  ) {
-    return globalThis.crypto.randomUUID();
-  }
-
-  return `${Date.now()}-${Math.random().toString(36).slice(2)}`;
 }
 
 function LoadingView() {
@@ -244,8 +214,7 @@ function ErrorView({ message }) {
           </h1>
 
           <p className="mx-auto mt-3 max-w-md text-sm leading-7 text-[#817378]">
-            {message ||
-              'Materi yang kamu cari belum tersedia atau tidak dapat dimuat.'}
+            {message || 'Materi yang kamu cari belum tersedia atau tidak dapat dimuat.'}
           </p>
 
           <Link
@@ -261,11 +230,7 @@ function ErrorView({ message }) {
   );
 }
 
-function TableOfContents({
-  headings,
-  activeSection,
-  onSelect
-}) {
+function TableOfContents({ headings, activeSection, onSelect }) {
   if (!headings.length) return null;
 
   return (
@@ -294,11 +259,7 @@ function TableOfContents({
               }`}
             >
               <span className="flex items-start gap-3">
-                <span
-                  className={`mt-0.5 text-[10px] font-bold ${
-                    active ? 'text-[#7A1025]' : 'text-[#B5A3A8]'
-                  }`}
-                >
+                <span className={`mt-0.5 text-[10px] font-bold ${active ? 'text-[#7A1025]' : 'text-[#B5A3A8]'}`}>
                   {String(section.number).padStart(2, '0')}
                 </span>
 
@@ -319,56 +280,65 @@ function QuizCard({ quiz, compact = false }) {
     return null;
   }
 
+  const questionCount = Number(quiz.questionCount ?? quiz._count?.questions ?? 0);
+  const passingScore = Number(quiz.passingScore ?? 80);
+  const xpPerCorrect = Number(quiz.xpPerCorrect ?? 100);
+
   return (
     <div
-      className={`${
+      className={`relative overflow-hidden ${
         compact
           ? 'rounded-[22px] bg-[#7A1025] p-5 text-white'
-          : 'rounded-[22px] border border-[#E9D8DC] bg-[#FFF8F9] p-6 sm:p-7'
+          : 'rounded-[24px] border border-[#E8D5DA] bg-[#FFF8F9] p-6 sm:p-7'
       }`}
     >
-      <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-        <div className="min-w-0">
-          <div
-            className={`flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.18em] ${
-              compact ? 'text-white/70' : 'text-[#9B7580]'
-            }`}
-          >
-            <BookOpenCheck size={14} />
+      <div className={`absolute -right-10 -top-10 h-28 w-28 rounded-full blur-3xl ${compact ? 'bg-white/10' : 'bg-[#F0CDD5]'}`} />
 
-            <span>Tahap berikutnya</span>
-          </div>
-
-          <h3
-            className={`mt-3 text-lg font-semibold tracking-tight ${
-              compact ? 'text-white' : 'text-[#291C21]'
-            }`}
-          >
-            {quiz.title || 'Kuis pemahaman'}
-          </h3>
-
-          {quiz.description && (
-            <p
-              className={`mt-2 text-sm leading-6 ${
-                compact ? 'text-white/75' : 'text-[#796C72]'
-              }`}
-            >
-              {quiz.description}
-            </p>
-          )}
+      <div className="relative">
+        <div className={`flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.18em] ${compact ? 'text-white/70' : 'text-[#9B7580]'}`}>
+          <Sparkles size={14} />
+          Uji pemahaman
         </div>
 
-        <Link
-          to={`/kuis/${encodeURIComponent(quiz.id)}`}
-          className={`inline-flex shrink-0 items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition ${
-            compact
-              ? 'bg-white text-[#7A1025] hover:bg-[#FFF0F3]'
-              : 'bg-[#7A1025] text-white hover:bg-[#650D1F]'
-          }`}
-        >
-          Mulai kuis
-          <ChevronRight size={15} />
-        </Link>
+        <div className="mt-4 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+          <div className="min-w-0">
+            <h3 className={`text-xl font-semibold tracking-tight ${compact ? 'text-white' : 'text-[#291C21]'}`}>
+              {quiz.title || 'Kuis pemahaman'}
+            </h3>
+
+            {quiz.description && (
+              <p className={`mt-2 max-w-2xl text-sm leading-6 ${compact ? 'text-white/75' : 'text-[#796C72]'}`}>
+                {quiz.description}
+              </p>
+            )}
+
+            <div className={`mt-4 flex flex-wrap gap-2 text-xs ${compact ? 'text-white/75' : 'text-[#77666D]'}`}>
+              <span className={`rounded-lg px-3 py-2 ${compact ? 'bg-white/10' : 'bg-white'}`}>
+                {questionCount} soal
+              </span>
+
+              <span className={`rounded-lg px-3 py-2 ${compact ? 'bg-white/10' : 'bg-white'}`}>
+                Min. {passingScore}%
+              </span>
+
+              <span className={`rounded-lg px-3 py-2 ${compact ? 'bg-white/10' : 'bg-white'}`}>
+                +{xpPerCorrect} XP
+              </span>
+            </div>
+          </div>
+
+          <Link
+            to={`/kuis/${encodeURIComponent(quiz.id)}`}
+            className={`inline-flex shrink-0 items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition ${
+              compact
+                ? 'bg-white text-[#7A1025] hover:bg-[#FFF0F3]'
+                : 'bg-[#7A1025] text-white hover:bg-[#650D1F]'
+            }`}
+          >
+            Mulai kuis
+            <ChevronRight size={15} />
+          </Link>
+        </div>
       </div>
     </div>
   );
@@ -378,8 +348,10 @@ export default function MateriDetail() {
   const { slug } = useParams();
 
   const [material, setMaterial] = useState(null);
+  const [quiz, setQuiz] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [quizError, setQuizError] = useState('');
 
   const [progress, setProgress] = useState(0);
   const [activeSection, setActiveSection] = useState(null);
@@ -395,7 +367,9 @@ export default function MateriDetail() {
     async function loadMaterial() {
       setLoading(true);
       setError('');
+      setQuizError('');
       setMaterial(null);
+      setQuiz(null);
       setProgress(0);
       setActiveSection(null);
 
@@ -406,10 +380,7 @@ export default function MateriDetail() {
       }
 
       try {
-        const response = await publicFetch(
-          `/materials/${encodeURIComponent(slug)}`
-        );
-
+        const response = await publicFetch(`/materials/${encodeURIComponent(slug)}`);
         const result = normalizeMaterial(response);
 
         if (!active) return;
@@ -419,13 +390,36 @@ export default function MateriDetail() {
         }
 
         setMaterial(result);
+
+        /*
+         * Quiz sekarang diambil dari endpoint publik quiz.
+         * Kita cocokkan berdasarkan materialId agar MateriDetail
+         * tidak bergantung pada relasi material.quiz.
+         */
+        try {
+          const quizResponse = await quizApi.publicList({ page: 1, limit: 100 });
+          const quizRecords = quizResponse?.data?.items ?? quizResponse?.items ?? [];
+
+          const relatedQuiz = Array.isArray(quizRecords)
+            ? quizRecords.find((item) => String(item.materialId) === String(result.id))
+            : null;
+
+          if (active) {
+            setQuiz(relatedQuiz || null);
+          }
+        } catch (quizLoadError) {
+          console.error('Gagal memuat quiz materi:', quizLoadError);
+
+          if (active) {
+            setQuiz(null);
+            setQuizError('Kuis untuk materi ini belum dapat dimuat.');
+          }
+        }
       } catch (err) {
         console.error('Gagal memuat detail materi:', err);
 
         if (active) {
-          setError(
-            getErrorMessage(err, 'Gagal memuat materi.')
-          );
+          setError(getErrorMessage(err, 'Gagal memuat materi.'));
         }
       } finally {
         if (active) {
@@ -448,9 +442,7 @@ export default function MateriDetail() {
     }
 
     try {
-      const saved = localStorage.getItem(
-        getQuestionStorageKey(slug)
-      );
+      const saved = localStorage.getItem(getQuestionStorageKey(slug));
 
       if (!saved) {
         setQuestions([]);
@@ -461,12 +453,7 @@ export default function MateriDetail() {
 
       setQuestions(
         Array.isArray(parsed)
-          ? parsed.filter(
-              (item) =>
-                item &&
-                typeof item.id === 'string' &&
-                typeof item.question === 'string'
-            )
+          ? parsed.filter((item) => item && typeof item.id === 'string' && typeof item.question === 'string')
           : []
       );
     } catch (err) {
@@ -480,19 +467,17 @@ export default function MateriDetail() {
     [material?.content]
   );
 
-  const headings = useMemo(() => {
-    return contentBlocks
-      .map((block, index) => ({
-        ...block,
-        originalIndex: index
-      }))
+  const headings = useMemo(
+    () => contentBlocks
+      .map((block, index) => ({ ...block, originalIndex: index }))
       .filter((block) => block.type === 'heading')
       .map((block, index) => ({
         id: `section-${block.originalIndex}`,
         label: block.content,
         number: index + 1
-      }));
-  }, [contentBlocks]);
+      })),
+    [contentBlocks]
+  );
 
   const category =
     material?.categories?.[0]?.category?.name ||
@@ -500,15 +485,8 @@ export default function MateriDetail() {
     material?.category?.name ||
     'Pembelajaran';
 
-  const readingTime = getReadingTime(
-    material?.content,
-    material?.readTimeMinutes
-  );
-
-  const quiz = material?.quiz || null;
-
-  const hasQuiz =
-    Boolean(quiz?.id) && quiz?.status === 'PUBLISHED';
+  const readingTime = getReadingTime(material?.content, material?.readTimeMinutes);
+  const hasQuiz = Boolean(quiz?.id && quiz?.status === 'PUBLISHED');
 
   useEffect(() => {
     let ticking = false;
@@ -519,20 +497,14 @@ export default function MateriDetail() {
       ticking = true;
 
       window.requestAnimationFrame(() => {
-        const documentHeight =
-          document.documentElement.scrollHeight;
+        const documentHeight = document.documentElement.scrollHeight;
+        const pageHeight = documentHeight - window.innerHeight;
 
-        const pageHeight =
-          documentHeight - window.innerHeight;
+        const currentProgress = pageHeight > 0
+          ? (window.scrollY / pageHeight) * 100
+          : 0;
 
-        const currentProgress =
-          pageHeight > 0
-            ? (window.scrollY / pageHeight) * 100
-            : 0;
-
-        setProgress(
-          Math.min(100, Math.max(0, currentProgress))
-        );
+        setProgress(Math.min(100, Math.max(0, currentProgress)));
 
         if (headings.length) {
           let current = headings[0].id;
@@ -540,10 +512,7 @@ export default function MateriDetail() {
           headings.forEach((section) => {
             const element = document.getElementById(section.id);
 
-            if (
-              element &&
-              element.getBoundingClientRect().top <= 170
-            ) {
+            if (element && element.getBoundingClientRect().top <= 170) {
               current = section.id;
             }
           });
@@ -557,12 +526,8 @@ export default function MateriDetail() {
       });
     };
 
-    window.addEventListener('scroll', handleScroll, {
-      passive: true
-    });
-
+    window.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('resize', handleScroll);
-
     handleScroll();
 
     return () => {
@@ -593,9 +558,7 @@ export default function MateriDetail() {
     }
 
     if (cleanQuestion.length < 10) {
-      setQuestionError(
-        'Pertanyaan minimal 10 karakter agar lebih mudah dipahami.'
-      );
+      setQuestionError('Pertanyaan minimal 10 karakter agar lebih mudah dipahami.');
       return;
     }
 
@@ -614,15 +577,14 @@ export default function MateriDetail() {
 
     try {
       const newQuestion = {
-        id: createQuestionId(),
+        id: typeof crypto?.randomUUID === 'function'
+          ? crypto.randomUUID()
+          : `${Date.now()}-${Math.random().toString(36).slice(2)}`,
         question: cleanQuestion,
         createdAt: new Date().toISOString()
       };
 
-      const nextQuestions = [
-        newQuestion,
-        ...questions
-      ];
+      const nextQuestions = [newQuestion, ...questions];
 
       localStorage.setItem(
         getQuestionStorageKey(slug),
@@ -633,10 +595,7 @@ export default function MateriDetail() {
       setQuestion('');
     } catch (err) {
       console.error('Gagal menyimpan pertanyaan:', err);
-
-      setQuestionError(
-        'Pertanyaan belum berhasil disimpan. Periksa penyimpanan browser.'
-      );
+      setQuestionError('Pertanyaan belum berhasil disimpan. Periksa penyimpanan browser.');
     } finally {
       setSubmittingQuestion(false);
     }
@@ -647,11 +606,7 @@ export default function MateriDetail() {
   }
 
   if (error || !material) {
-    return (
-      <ErrorView
-        message={error || 'Materi yang kamu cari belum tersedia.'}
-      />
-    );
+    return <ErrorView message={error || 'Materi yang kamu cari belum tersedia.'} />;
   }
 
   return (
@@ -721,14 +676,7 @@ export default function MateriDetail() {
                   </span>
                 </div>
 
-                <div
-                  className="mt-3 h-1.5 overflow-hidden rounded-full bg-[#EEE5E5]"
-                  role="progressbar"
-                  aria-label="Progres membaca"
-                  aria-valuemin={0}
-                  aria-valuemax={100}
-                  aria-valuenow={Math.round(progress)}
-                >
+                <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-[#EEE5E5]">
                   <motion.div
                     className="h-full rounded-full bg-[#7A1025]"
                     animate={{ width: `${progress}%` }}
@@ -770,8 +718,7 @@ export default function MateriDetail() {
                     </p>
 
                     <p className="mt-2 text-sm leading-6 text-[#817378]">
-                      Baca perlahan dan pahami konteksnya.
-                      Kamu tidak perlu terburu-buru menyelesaikannya.
+                      Baca perlahan dan pahami konteksnya. Kamu tidak perlu terburu-buru menyelesaikannya.
                     </p>
                   </div>
 
@@ -782,45 +729,24 @@ export default function MateriDetail() {
                           const sectionId = `section-${index}`;
 
                           return (
-                            <section
-                              key={sectionId}
-                              id={sectionId}
-                              className="scroll-mt-28"
-                            >
-                              <h2
-                                className={`max-w-3xl text-[1.65rem] font-semibold leading-tight tracking-[-0.035em] text-[#2A1E23] sm:text-[1.9rem] ${
-                                  index === 0
-                                    ? 'mt-0'
-                                    : 'mt-14 border-t border-[#EEE6E4] pt-12'
-                                }`}
-                              >
+                            <section key={sectionId} id={sectionId} className="scroll-mt-28">
+                              <h2 className={`max-w-3xl text-[1.65rem] font-semibold leading-tight tracking-[-0.035em] text-[#2A1E23] sm:text-[1.9rem] ${index === 0 ? 'mt-0' : 'mt-14 border-t border-[#EEE6E4] pt-12'}`}>
                                 {block.content}
                               </h2>
                             </section>
                           );
                         }
 
-                        if (
-                          block.type === 'list' ||
-                          block.type === 'orderedList'
-                        ) {
-                          const ListElement =
-                            block.type === 'orderedList' ? 'ol' : 'ul';
+                        if (block.type === 'list' || block.type === 'orderedList') {
+                          const ListElement = block.type === 'orderedList' ? 'ol' : 'ul';
 
                           return (
                             <ListElement
                               key={`list-${index}`}
-                              className={`my-7 max-w-3xl space-y-3 pl-6 text-[15px] leading-8 text-[#574A50] sm:text-[16px] ${
-                                block.type === 'orderedList'
-                                  ? 'list-decimal'
-                                  : 'list-disc'
-                              }`}
+                              className={`my-7 max-w-3xl space-y-3 pl-6 text-[15px] leading-8 text-[#574A50] sm:text-[16px] ${block.type === 'orderedList' ? 'list-decimal' : 'list-disc'}`}
                             >
                               {block.items.map((item, itemIndex) => (
-                                <li
-                                  key={itemIndex}
-                                  className="pl-2 marker:text-[#C58B98]"
-                                >
+                                <li key={itemIndex} className="pl-2 marker:text-[#C58B98]">
                                   {renderInlineText(item)}
                                 </li>
                               ))}
@@ -831,9 +757,7 @@ export default function MateriDetail() {
                         return (
                           <p
                             key={`paragraph-${index}`}
-                            className={`max-w-[760px] text-[15px] leading-8 text-[#574A50] sm:text-[16px] sm:leading-[1.95] ${
-                              index > 0 ? 'mt-6' : ''
-                            }`}
+                            className={`max-w-[760px] text-[15px] leading-8 text-[#574A50] sm:text-[16px] sm:leading-[1.95] ${index > 0 ? 'mt-6' : ''}`}
                           >
                             {renderInlineText(block.content)}
                           </p>
@@ -842,10 +766,7 @@ export default function MateriDetail() {
                     </div>
                   ) : (
                     <div className="rounded-2xl border border-dashed border-[#E2D5D8] bg-[#FFFCFC] px-6 py-10 text-center">
-                      <BookOpenCheck
-                        size={22}
-                        className="mx-auto text-[#B9949D]"
-                      />
+                      <BookOpenCheck size={22} className="mx-auto text-[#B9949D]" />
 
                       <p className="mt-3 text-sm font-semibold text-[#514349]">
                         Konten materi belum tersedia
@@ -854,6 +775,12 @@ export default function MateriDetail() {
                       <p className="mt-1 text-xs leading-6 text-[#97898E]">
                         Silakan kembali lagi setelah materi diperbarui.
                       </p>
+                    </div>
+                  )}
+
+                  {quizError && (
+                    <div className="mt-10 rounded-2xl border border-[#E8D5DA] bg-[#FFF8F9] px-4 py-3 text-xs leading-5 text-[#8B6871]">
+                      {quizError}
                     </div>
                   )}
 
@@ -876,9 +803,7 @@ export default function MateriDetail() {
                   </h2>
 
                   <p className="mt-2 max-w-2xl text-sm leading-7 text-[#7F7177]">
-                    Tulis pertanyaanmu berdasarkan materi ini.
-                    Pertanyaan disimpan di perangkat ini, bukan dikirim
-                    ke server atau ditampilkan kepada pengguna lain.
+                    Tulis pertanyaanmu berdasarkan materi ini. Pertanyaan disimpan di perangkat ini, bukan dikirim ke server atau ditampilkan kepada pengguna lain.
                   </p>
                 </div>
 
@@ -886,10 +811,7 @@ export default function MateriDetail() {
                   onSubmit={submitQuestion}
                   className="rounded-[24px] border border-[#E8DCDD] bg-white p-5 shadow-[0_16px_50px_rgba(71,31,42,0.035)] sm:p-6"
                 >
-                  <label
-                    htmlFor="material-question"
-                    className="text-sm font-semibold text-[#30242A]"
-                  >
+                  <label htmlFor="material-question" className="text-sm font-semibold text-[#30242A]">
                     Apa yang masih membingungkan?
                   </label>
 
@@ -905,14 +827,10 @@ export default function MateriDetail() {
                     maxLength={500}
                     placeholder="Contoh: Saya masih bingung membedakan dua kondisi yang dijelaskan pada materi ini..."
                     className="mt-3 w-full resize-none rounded-[18px] border border-[#E6DCDD] bg-[#FFFCFC] px-4 py-4 text-sm leading-7 text-[#3A2E33] outline-none transition placeholder:text-[#B2A5A9] focus:border-[#B98794] focus:ring-4 focus:ring-[#F7E8EB]"
-                    aria-describedby="question-help"
                   />
 
                   <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                    <div
-                      id="question-help"
-                      aria-live="polite"
-                    >
+                    <div aria-live="polite">
                       {questionError ? (
                         <p className="text-xs font-medium text-[#A33E55]">
                           {questionError}
@@ -930,10 +848,7 @@ export default function MateriDetail() {
                       className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#7A1025] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#650D1F] disabled:cursor-not-allowed disabled:opacity-60"
                     >
                       <Send size={14} />
-
-                      {submittingQuestion
-                        ? 'Menyimpan...'
-                        : 'Simpan pertanyaan'}
+                      {submittingQuestion ? 'Menyimpan...' : 'Simpan pertanyaan'}
                     </button>
                   </div>
                 </form>
@@ -941,10 +856,7 @@ export default function MateriDetail() {
                 <div className="mt-6 space-y-4">
                   {questions.length === 0 ? (
                     <div className="rounded-[22px] border border-dashed border-[#E2D5D8] bg-[#FFFDFD] px-6 py-10 text-center">
-                      <MessageCircle
-                        size={20}
-                        className="mx-auto text-[#B9949D]"
-                      />
+                      <MessageCircle size={20} className="mx-auto text-[#B9949D]" />
 
                       <p className="mt-3 text-sm font-medium text-[#514349]">
                         Belum ada pertanyaan.
@@ -971,21 +883,14 @@ export default function MateriDetail() {
                             </p>
                           </div>
 
-                          <MessageCircle
-                            size={16}
-                            className="mt-1 shrink-0 text-[#C4939D]"
-                          />
+                          <MessageCircle size={16} className="mt-1 shrink-0 text-[#C4939D]" />
                         </div>
 
                         <div className="mt-4 flex items-center gap-2 border-t border-[#F0E7E7] pt-3">
-                          <CheckCircle2
-                            size={13}
-                            className="text-[#9B5265]"
-                          />
+                          <CheckCircle2 size={13} className="text-[#9B5265]" />
 
                           <p className="text-[10px] text-[#9B8D92]">
-                            Disimpan di perangkat ini ·{' '}
-                            {formatDate(item.createdAt)}
+                            Disimpan di perangkat ini · {formatDate(item.createdAt)}
                           </p>
                         </div>
                       </div>
@@ -1010,30 +915,21 @@ export default function MateriDetail() {
 
                   <div className="mt-5 space-y-4">
                     <div>
-                      <p className="text-xs text-[#998A8F]">
-                        Kategori
-                      </p>
-
+                      <p className="text-xs text-[#998A8F]">Kategori</p>
                       <p className="mt-1 text-sm font-semibold text-[#34272D]">
                         {category}
                       </p>
                     </div>
 
                     <div className="border-t border-[#EEE5E4] pt-4">
-                      <p className="text-xs text-[#998A8F]">
-                        Waktu baca
-                      </p>
-
+                      <p className="text-xs text-[#998A8F]">Waktu baca</p>
                       <p className="mt-1 text-sm font-semibold text-[#34272D]">
                         Sekitar {readingTime} menit
                       </p>
                     </div>
 
                     <div className="border-t border-[#EEE5E4] pt-4">
-                      <p className="text-xs text-[#998A8F]">
-                        Pertanyaan pribadi
-                      </p>
-
+                      <p className="text-xs text-[#998A8F]">Pertanyaan pribadi</p>
                       <p className="mt-1 text-sm font-semibold text-[#34272D]">
                         {questions.length}
                       </p>
@@ -1042,10 +938,7 @@ export default function MateriDetail() {
                 </section>
 
                 {hasQuiz && (
-                  <QuizCard
-                    quiz={quiz}
-                    compact
-                  />
+                  <QuizCard quiz={quiz} compact />
                 )}
 
                 <Link
