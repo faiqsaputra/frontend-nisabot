@@ -28,7 +28,7 @@ import { supabase } from './lib/supabase';
 
 const API_URL = (
   import.meta.env.VITE_API_URL ||
-  'https://nusa-bot-backend.vercel.app/api'
+  'nisqa-bot.vercel.app/api'
 ).replace(/\/+$/, '');
 
 function LoadingScreen() {
